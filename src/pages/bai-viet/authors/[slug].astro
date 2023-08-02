@@ -1,0 +1,118 @@
+---
+import Author from "src/blogs/pages/author";
+import { getPostsByAuthorSlug, getRecentPosts, getSearchData } from 'src/blogs/lib/posts';
+import { getUserByNameSlug } from "src/blogs/lib/users";
+import { AuthorJsonLd, LocalBusinessJsonLd, OrganizationJsonLd } from "src/blogs/lib/json-ld";
+import { SEO } from "astro-seo";
+import { getCategories } from "src/blogs/lib/categories";
+import { getAllMenus } from "src/blogs/lib/menus";
+
+const pathname = Astro.url.pathname;
+const { slug }: any = Astro.params;
+const homepage = 'https://sim.vn'
+
+const { user } = await getUserByNameSlug(slug);
+
+// if (!user) {
+//   return {
+//     props: {},
+//     notFound: true,
+//   };
+// }
+
+const { posts } = await getPostsByAuthorSlug({
+  slug: user?.slug,
+  queryIncludes: 'archive',
+});
+
+const { categories } = await getCategories({
+  count: 5,
+});
+
+const { posts: recentPosts } = await getRecentPosts({
+  count: 5,
+  queryIncludes: 'index',
+});
+
+const { menus = [] } = await getAllMenus();
+
+const searchData = await getSearchData();
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    { user &&
+      <head>
+        <SEO title={user.title}
+          description={user.description}
+          noindex = {user.robots.nofollow == 'follow' ? false : true}
+          nofollow = {user.robots.noindex == 'index' ? false : true}
+  
+          extend={{
+            // extending the default link tags
+            link: [
+              {
+                rel: 'alternate',
+                href: `/bai-viet/authors/${slug}`,
+                hrefLang: 'vi-vn',
+              },
+  
+              // Favicon sizes and manifest generated via https://favicon.io/
+              {
+                rel: 'icon',
+                type: 'image/x-icon',
+                href: '/favicon.ico',
+              },
+              {
+                name: 'viewport',
+                content: 'content="width=device-width, initial-scale=1, maximum-scale=1',
+              },
+              {
+                rel: 'apple-touch-icon',
+                sizes: '180x180',
+                href: '/bai-viet/apple-touch-icon.png',
+              },
+              {
+                rel: 'icon',
+                type: 'image/png',
+                sizes: '16x16',
+                href: '/bai-viet/favicon-16x16.png',
+              },
+              {
+                rel: 'icon',
+                type: 'image/png',
+                sizes: '32x32',
+                href: '/bai-viet/favicon-32x32.png',
+              },
+              {
+                rel: 'manifest',
+                href: '/bai-viet/site.webmanifest',
+              }
+            ]
+          }}
+        />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="SIM.VN" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json" set:html={AuthorJsonLd(user)}></script>
+    <script type="application/ld+json" set:html={LocalBusinessJsonLd()}></script>
+    <script type="application/ld+json" set:html={OrganizationJsonLd()}></script>
+
+    <link rel="alternate" type="application/rss+xml" title={"Dòng thông tin SimVN"} href="/bai-viet/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title={"Dòng phản hồi SimVN"}
+          href="/bai-viet/comments/feed/" />
+  </head>
+  }
+  <body>
+    <Author posts={posts} user={user} menus={menus} recentPosts = {recentPosts}
+    searchData={searchData} categories={categories} />
+  </body>
+</html>

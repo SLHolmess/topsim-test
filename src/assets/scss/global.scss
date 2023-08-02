@@ -1,0 +1,424 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.navbar-logo {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 22px;
+  margin-top: 0px !important;
+  color: #fff;
+}
+
+.icon-sim-item {
+  background-color: #f2f5f8;
+  width: 56px;
+  height: 56px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: 80% auto;
+  background-position: center center;
+}
+
+.viettel-logo {
+  background-image: url("/src/assets/images/logo/logo-viettel.svg");
+}
+
+.vinaphone-logo {
+  background-image: url("/src/assets/images/logo/logo-vinaphone.svg");
+}
+
+.mobifone-logo {
+  background-image: url("/src/assets/images/logo/logo-mobifone.svg");
+}
+
+.vietnamobile-logo {
+  background-image: url("/src/assets/images/logo/logo-vietnamobile.svg");
+}
+
+.itelecom-logo {
+  background-image: url("/src/assets/images/logo/logo-itel.svg");
+}
+
+.gmobile-logo {
+  background-image: url("/src/assets/images/logo/logo-gmobile.svg");
+}
+
+.sim-title {
+  & > i {
+    color: orangered;
+    font-style: normal !important;
+  }
+}
+
+.find-more-content {
+  height: 500px;
+  overflow-y: auto;
+  background-color: #f1efef;
+  & strong {
+    line-height: 30px;
+    color: #0071c7;
+  }
+  & em {
+    font-weight: 600;
+  }
+  & p {
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  /* Định dạng tiêu đề */
+  & h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  & h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  /* Định dạng danh sách */
+  & ul,
+  ol {
+    margin-left: 2em;
+    margin-bottom: 10px;
+    list-style-type: circle;
+  }
+}
+
+.static-page {
+  td {
+    background-color: #f1f5f8 !important;
+  }
+  a {
+    color: blue !important;
+  }
+}
+
+.form-search-phong-thuy {
+  background-image: url("/src/assets/images/icons/form-search-phong-thuy.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 500px;
+  width: 55%;
+}
+
+.font-phong-thuy {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  color: #bc0000;
+}
+
+.button-phong-thuy {
+  background-image: url("/src/assets/images/icons/button-phong-thuy.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 212px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  color: #ffeaa2;
+  font-weight: 700;
+}
+
+.mobile-logo-icon {
+  width: 100px;
+  overflow: hidden;
+}
+
+.mobile-logo-icon-side {
+  width: 100%;
+  overflow: hidden;
+}
+
+.ub-bg-clr_F4F5F9_lt2bi9[aria-disabled="true"][aria-current="page"],
+.ub-bg-clr_F4F5F9_lt2bi9[aria-selected="true"] {
+  background-color: #fff !important;
+}
+
+.mobile-button-filter-price {
+  color: #000;
+  padding-block: 5px;
+  margin-inline: auto;
+  font-size: 12px;
+  border: 1px solid #e7dfdf;
+  width: 122px;
+  text-align: center;
+  background-color: #f1f1f1;
+  display: block;
+  border-radius: 4px;
+}
+
+.mobile-menu-contact {
+  background: #efefef;
+  border-radius: 3px;
+  color: #747474;
+  display: block;
+  margin: 5px 0;
+  padding: 3px 21px;
+  & > span {
+    color: #288ad6;
+    font-weight: 700;
+  }
+}
+
+.mobile-button-dat-sim {
+  padding: 5px;
+  display: block;
+  text-align: center;
+  background: #288ad6;
+  color: #ebe8e8;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.mobile-menu-header {
+  display: none;
+}
+
+.mobile-price-item {
+  text-align: center;
+  width: 120px;
+  height: 35px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  opacity: 0.5;
+}
+
+.modal-wrapper {
+  position: fixed;
+  // top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.modal {
+  z-index: 100;
+  background: white;
+  position: relative;
+  margin: 1.75rem auto;
+  border-radius: 3px;
+  max-width: 500px;
+  // padding: 2rem;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-close-button {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  opacity: 0.3;
+  cursor: pointer;
+  border: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .side-menu-hidden {
+    display: none;
+  }
+
+  .form-search-phong-thuy {
+    background-image: url("/src/assets/images/icons/form-search-phong-thuy-mb.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height: 550px;
+    width: 100%;
+    padding-top: 6rem;
+  }
+
+  .nav-desktop {
+    display: none;
+  }
+
+  .price-filter-mobile {
+    overflow-x: auto;
+    // gap: 5px;
+    & .mobile-price-button {
+      width: 100px;
+      float: left;
+      height: 34px;
+    }
+  }
+
+  .mobile-container {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .mobile-price-item {
+    width: 120px;
+    height: 34px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 15px;
+    font-size: 13px;
+  }
+
+  .price-sim-item {
+    font-size: 12px;
+    & span {
+      font-size: 11px;
+    }
+  }
+
+  .icon-sim-item {
+    background-color: #f2f5f8;
+    width: 46px;
+    height: 46px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .width-block-button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .footer-mobile {
+    padding-inline: 10px;
+  }
+
+  .container {
+    max-width: 80rem;
+    width: 100%;
+    height: auto;
+    padding: 0 2rem;
+    margin: 0 auto;
+  }
+
+  .mobile-menu-header {
+    display: block;
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.8rem 0;
+      background-color: #ffffff;
+      z-index: 99;
+      will-change: transform;
+      transform: translateZ(0);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
+
+      &-item {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: center;
+        text-align: center;
+        font-size: 12px;
+        color: #505050;
+      }
+
+      &-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .active {
+        color: #60a5fa;
+      }
+    }
+  }
+
+  .mobile-logo-icon {
+    margin-right: 10px;
+    padding-inline: 10px;
+    padding-block: 8px;
+    & > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .mobile-logo-icon-side {
+    height: 30px;
+    // margin-right: 10px;
+    padding-inline: 10px;
+    padding-block: 4px;
+    & > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+@media only screen and (min-width: 768.1px) {
+  .bg-blue-400 {
+    display: none;
+  }
+
+  .nav-desktop {
+    display: block;
+  }
+}
+
+.cham-diem-sim {
+  & > b {
+    color: #ff4d00;
+  }
+}
+
+.button-filter-active {
+  box-sizing: border-box;
+  border: 1px solid #e9262a !important;
+  border-radius: 5px;
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    border: 1px solid #e9262a;
+    border-left: none;
+    border-bottom: 13px solid transparent;
+    border-right: 13px solid #e9262a;
+    border-radius: 0px 5px 0px 0px;
+  }
+}
+
+.not-italic {
+  & i {
+    font-style: normal;
+  }
+}

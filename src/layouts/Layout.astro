@@ -1,0 +1,85 @@
+---
+import SideFilter from "src/components/side-menu";
+import Footer from "../components/layout/Footer.astro";
+import Navigation from "../components/layout/Navigation.astro";
+
+export interface Props {
+  title: string;
+  noSide?: boolean;
+  desc?: string;
+}
+
+const { title, noSide, desc } = Astro.props;
+
+let canonical: string = Astro.url.searchParams.toString().length 
+  ? Astro.url.toString().replace(`?${Astro.url.searchParams.toString()}`, '')
+  : Astro.url.toString();
+
+const isMatchedHeadSearch = canonical.match(/sim-dau-so-(\d+)/);
+if (isMatchedHeadSearch) {
+  const head = isMatchedHeadSearch.at(1);
+  
+  canonical = canonical.replace(/sim-dau-so-(\d+)/, `sim-dau-so-${head?.substring(0, 4)}`)
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={desc} />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>{title}</title>
+    <link rel="canonical" href={canonical} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QRW9WYM38N"></script>
+  </head>
+  <body>
+    <Navigation />
+    <div class="px-1 md:w-12/12 xl:w-9/12 2xl:w-8/12 m-auto">
+      {
+        noSide ? (
+          <div class="grid grid-cols-6 gap-5">
+            <div class="col-span-6">
+              <slot />
+            </div>
+          </div>
+        ) : (
+          <div class="md:grid md:grid-cols-6 md:gap-5">
+            <div class="md:col-span-4 px-1">
+              <slot />
+            </div>
+            <div class="col-span-2 side-menu-hidden">
+              <SideFilter client:load />
+            </div>
+          </div>
+        )
+      }
+    </div>
+    <Footer />
+  </body>
+</html>
+<style is:global lang="scss">
+  @use "../assets/scss/global.scss" as *;
+  // :root {
+
+  // }
+  html {
+    font-family: system-ui, sans-serif;
+    background-color: #f6f6f6;
+    background: #f1f5f8;
+  }
+  code {
+    font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
+      DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  }
+</style>

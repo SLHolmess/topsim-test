@@ -1,0 +1,59 @@
+
+#toc_container {
+  width: 100% !important;
+}
+
+.postTitle {
+  width: 100%;
+  font-weight: 700;
+  font-size: 20px;
+  margin-block: 2rem;
+  border: 1px solid #3563eb;
+  padding: 10px;
+  text-align: center;
+  color: #0d44e9;
+  border-radius: 5px;
+}
+
+.postContent {
+  & figcaption {
+    display: none;
+  }
+
+  & figure {
+    max-width: 100%;
+  }
+
+  & img {
+    margin-block: 20px;
+    margin-right: 15px;
+    width: 100%;
+  }
+
+  & table {
+    border: 1px solid #ccc;
+    & tr {
+      & td {
+        border: 1px solid #ccc;
+        padding-inline: 10px;
+      }
+      & td:nth-child(1) {
+        text-align: center;
+      }
+    }
+  }
+  & strong {
+    width: 100% !important;
+    margin-top: 10px;
+    color: #3563eb !important;
+    // text-align: center !important;
+    margin: auto !important;
+  }
+}
+
+.author {
+  width: 30px;
+  height: 30px;
+  background-size: contain;
+  border-radius: 50%;
+}

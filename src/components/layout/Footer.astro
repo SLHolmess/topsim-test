@@ -1,0 +1,125 @@
+---
+import logo from "../../assets/images/logo";
+import MenuPopover from "../../components/mobile/MenuPopover";
+import SearchPopover from "../../components/mobile/SearchPopover";
+import {
+  ChatIcon,
+  HomeIcon,
+  PhoneIcon,
+} from "evergreen-ui";
+
+const urlActive = Astro.url.pathname
+---
+
+<hr />
+<div
+  class="md:grid md:grid-cols-2 xl:grid-cols-3 sm:w-full xl:w-9/12 2xl:w-7/12 mx-auto my-5 gap-3 footer-mobile"
+>
+  <div class="mb-6">
+    <div class="text-lg font-bold text-blue-600">CÔNG TY CỔ PHẨN SIM.VN</div>
+    <div class="mt-4 grid grid-cols-2">
+      <div>
+        <div class="text-sm">Hotline</div>
+        <a href="tel:02466888333" class="font-bold font-md text-orange-400"
+          >02466.888.333</a
+        >
+      </div>
+      <div>
+        <div class="text-sm">Tư vấn phong thủy</div>
+        <a href="tel:19003333" class="font-bold font-md text-orange-400"
+          >1900.3333</a
+        >
+      </div>
+    </div>
+    <div class="mt-2">
+      <span class="font-bold">Giờ mở cửa:</span>
+      <span>08:00 - 21:00</span>
+    </div>
+    <div class="mt-2">
+      <span>info@sim.vn</span>
+    </div>
+  </div>
+  <div class="mb-6">
+    <div class="text-lg font-bold text-blue-600">THÔNG TIN</div>
+    <div class="flex flex-col gap-2 mt-3">
+      <a href="/dieu-khoan-va-dieu-kien-giao-dich-tai-simvn">
+        Điều khoản và điều kiện
+      </a>
+      <a href="/chinh-sach-bao-mat-thong-tin-khach-hang-tai-simvn">
+        Chính sách bảo mật
+      </a>
+      <a href="/chinh-sach-doi-tra"> Chính sách đổi trả</a>
+      <a href="/cach-mua-sim-va-thanh-toan">
+        Cách mua sim và thanh toán
+      </a>
+      <a href="/lien-he">Liên hệ</a>
+    </div>
+  </div>
+  <div class="mb-6">
+    <div class="text-lg font-bold text-blue-600">TẢI ỨNG DỤNG SIM.VN</div>
+    <div class="grid grid-cols-2 gap-2 mt-3">
+      <div class="cursor-pointer">
+        <img src={logo.GooglePlay} alt="" />
+      </div>
+      <div class="cursor-pointer">
+        <img src={logo.AppStore} alt="" />
+      </div>
+    </div>
+    <div class="text-lg font-bold text-blue-600 mt-2">CHỨNG NHẬN KẾT NỐI</div>
+    <a target="_blank" href="http://online.gov.vn/Home/WebDetails/57050">
+      <img src={logo.BoCongThuong} width={200} alt="" />
+    </a>
+  </div>
+</div>
+<div class="w-7/12 m-auto">
+  <hr />
+  <div class="flex justify-center py-2 text-sm">
+    © Copyright 2022. All rights reserved. Version 2.0.1
+  </div>
+</div>
+<header class="mobile-menu-header">
+  <div class="container">
+    <nav class="bottom-nav">
+      <div class="bottom-nav-item active">
+        <a class="bottom-nav-link" href="/">
+          <HomeIcon client:only />
+          <span>Trang chủ</span>
+        </a>
+      </div>
+      <div class="bottom-nav-item">
+        <SearchPopover client:only urlActive={urlActive} />
+      </div>
+      <div class="bottom-nav-item">
+        <MenuPopover client:only />
+      </div>
+      <div class="bottom-nav-item">
+        <a href="tel:02466888333" class="bottom-nav-link block">
+          <PhoneIcon client:only />
+          <span>Mua hàng</span>
+        </a>
+      </div>
+      <div class="bottom-nav-item">
+        <a
+          href="https://zalo.me/1118836311569004354"
+          target="_blank"
+          class="bottom-nav-link block"
+        >
+          <ChatIcon client:only />
+          <span>Trò chuyện</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+<script>
+  const navItems = document.querySelectorAll(".bottom-nav-item");
+
+  navItems.forEach(function (e, i) {
+    e.addEventListener("click", function (this: any, e) {
+      navItems.forEach(function (e2, i2) {
+        e2.classList.remove("active");
+      });
+      this.classList.add("active");
+    });
+  });
+</script>

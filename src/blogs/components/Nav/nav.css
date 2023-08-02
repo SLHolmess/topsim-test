@@ -1,0 +1,17 @@
+
+@media (max-width: 768px) {
+    .gt-s{
+        display: none;
+    }
+
+    .wr-s{
+        display: flex;
+        width: 45%;
+    }
+    
+    button {
+        width: 15vw;
+        font-size: 11px;
+    }
+}
+

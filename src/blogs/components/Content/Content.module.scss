@@ -1,0 +1,46 @@
+@import "../../styles/settings/_settings";
+
+.content {
+  font-size: 1.3rem;
+  
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+
+  h2,
+  h3,
+  h4,
+  p,
+  ul {
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+  p {
+    text-align: justify;
+    margin: 7px 0;
+    font-size: 19px;
+    color: #000;
+    @media (max-width: 768px) {
+      font-size: 21px;
+    }
+  }
+  figure {
+    width: auto !important;
+  }
+  ul {
+    font-size: 19px;
+  }
+  figcaption {
+    text-align: center;
+  }
+}

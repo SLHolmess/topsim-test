@@ -1,0 +1,25 @@
+---
+import BoiPhongThuy from "../components/views/PhongThuy/BoiPhongThuy";
+import SimService from "../service/sim";
+import Layout from "../layouts/Layout.astro";
+
+const searchString = Astro.url.search;
+
+// const searchParams = Astro.url.searchParams;
+
+// const params = Object.fromEntries(searchParams.entries());
+
+let dataPhongThuy;
+
+try {
+  dataPhongThuy = await SimService.getBoiPhongThuy(
+    `${searchString}&name="SIMVN"`
+  );
+} catch (error) {
+  console.log(error);
+}
+---
+
+<Layout noSide title="Xem phong thủy">
+  <BoiPhongThuy dataPhongThuy={dataPhongThuy} />
+</Layout>

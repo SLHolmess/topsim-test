@@ -1,0 +1,59 @@
+// import { gql } from '@apollo/client';
+import { gql } from "@apollo/client/core/index.js";
+
+// export const QUERY_ALL_USERS = "";
+// export const QUERY_ALL_USERS_SEO = "";
+
+export const QUERY_ALL_USERS = gql`
+  query AllUsers {
+    users(first: 10000) {
+      edges {
+        node {
+          avatar {
+            height
+            width
+            url
+          }
+          description
+          id
+          name
+          roles {
+            nodes {
+              name
+            }
+          }
+          slug
+        }
+      }
+    }
+  }
+`;
+
+export const QUERY_ALL_USERS_SEO = gql`
+  query AllUsersSeo {
+    users(first: 10000) {
+      edges {
+        node {
+          id
+          seo {
+            metaDesc
+            metaRobotsNofollow
+            metaRobotsNoindex
+            title
+            social {
+              youTube
+              wikipedia
+              twitter
+              soundCloud
+              pinterest
+              mySpace
+              linkedIn
+              instagram
+              facebook
+            }
+          }
+        }
+      }
+    }
+  }
+`;

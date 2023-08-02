@@ -1,0 +1,163 @@
+---
+import Category from "src/blogs/pages/category";
+import {
+  getPostsByCategoryId,
+  getRecentPosts,
+  getSearchData,
+} from "src/blogs/lib/posts";
+import { getCategoryBySlug } from "src/blogs/lib/categories";
+import { SEO } from "astro-seo";
+import { LocalBusinessJsonLd, OrganizationJsonLd } from "src/blogs/lib/json-ld";
+import { getCategories } from "src/blogs/lib/categories";
+import { getAllMenus } from "src/blogs/lib/menus";
+
+const pathname = Astro.url.pathname;
+const { slug } = Astro.params;
+const homepage = "https://sim.vn";
+
+const { category } = await getCategoryBySlug(slug);
+
+const { posts } = await getPostsByCategoryId({
+  categoryId: category?.databaseId,
+  queryIncludes: "archive",
+});
+
+const { categories } = await getCategories({
+  count: 5,
+});
+
+const { posts: recentPosts } = await getRecentPosts({
+  count: 5,
+  queryIncludes: "index",
+});
+
+const { menus = [] } = await getAllMenus();
+
+// const searchData = await getSearchData();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  {
+    category && (
+      <head>
+        <SEO
+          title={category.title}
+          description={category.description}
+          openGraph={{
+            basic: {
+              title: category.og.title,
+              type: category.og.type,
+              image: category.og.image ? category.og.image.sourceUrl : "",
+            },
+            article: {
+              author: category.og.author,
+              publishedTime: category.og.publishedTime,
+              modifiedTime: category.og.modifiedTime,
+            },
+            image: {
+              width: 2000,
+              height: 1000,
+              secureUrl: `${homepage}/images/og/${slug}.png`,
+              url: `${homepage}/images/og/${slug}.png`,
+            },
+          }}
+          twitter={{
+            description: category.twitter.description,
+            image: category.twitter.image
+              ? category.twitter.image.sourceUrl
+              : "",
+            title: category.twitter.title,
+          }}
+          noindex={false}
+          nofollow={false}
+          canonical={category.canonical}
+          extend={{
+            // extending the default link tags
+            link: [
+              {
+                rel: "alternate",
+                href: homepage + `/bai-viet/categories/${slug}/`,
+                hrefLang: "vi-vn",
+              },
+
+              // Favicon sizes and manifest generated via https://favicon.io/
+
+              {
+                rel: "icon",
+                type: "image/x-icon",
+                href: "/favicon.ico",
+              },
+              {
+                name: "viewport",
+                content:
+                  'content="width=device-width, initial-scale=1, maximum-scale=1',
+              },
+              {
+                rel: "apple-touch-icon",
+                sizes: "180x180",
+                href: "/bai-viet/apple-touch-icon.png",
+              },
+              {
+                rel: "icon",
+                type: "image/png",
+                sizes: "16x16",
+                href: "/bai-viet/favicon-16x16.png",
+              },
+              {
+                rel: "icon",
+                type: "image/png",
+                sizes: "32x32",
+                href: "/bai-viet/favicon-32x32.png",
+              },
+              {
+                rel: "manifest",
+                href: "/bai-viet/site.webmanifest",
+              },
+            ],
+          }}
+        />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="description" content="SIM.VN" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
+          rel="stylesheet"
+        />
+        <script type="application/ld+json" set:html={LocalBusinessJsonLd()} />
+        <script type="application/ld+json" set:html={OrganizationJsonLd()} />
+
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={"Dòng thông tin SimVN"}
+          href={homepage + "/bai-viet/feed.xml"}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={"Dòng phản hồi SimVN"}
+          href={homepage + "/bai-viet/comments/feed/"}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={category.title}
+          href={homepage + `/bai-viet/categories/${slug}` + "/feed/"}
+        />
+      </head>
+    )
+  }
+  <body>
+    <Category
+      client:only
+      posts={posts}
+      category={category}
+      menus={menus}
+      categories={categories}
+      recentPosts={recentPosts}
+    />
+  </body>
+</html>

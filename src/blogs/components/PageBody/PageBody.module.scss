@@ -1,0 +1,39 @@
+.leftSideTitle {
+  border-radius: 8px 8px 0 0;
+  background: #ff7b00;
+  padding-inline: 20px;
+  padding-block: 5px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.leftSideLine {
+  border-bottom: 2px solid #ff7b00;
+  margin-top: 2px;
+}
+
+.rightSideTitle {
+  border-radius: 8px 8px 0 0;
+  background: #00aeff;
+  padding-inline: 20px;
+  padding-block: 5px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.rightSideLine {
+  border-bottom: 2px solid #00aeff;
+  margin-top: 2px;
+}
+
+.categoryItem {
+  padding-block: 5px;
+  padding-inline: 10px;
+  margin-block: 4px;
+  border-left: 2px solid #75d3ff;
+  font-weight: 500;
+}
+
+.postItem {
+  background-size: contain;
+}

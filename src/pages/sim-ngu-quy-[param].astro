@@ -1,0 +1,79 @@
+---
+import ListSim from "../components/sim-component/ListSim";
+import SeoService from "../service/seo";
+import SimService from "../service/sim";
+import Layout from "../layouts/Layout.astro";
+import HeaderFilter from "src/components/filter-head";
+import PaginationCustom from "src/components/helpers/Pagination";
+import FindMoreContent from "src/components/seo-content";
+
+const { param } = Astro.params;
+const searchParams = Astro.url.search;
+const pathname = Astro.url.pathname;
+
+const paramArr = param?.split("-");
+
+let req = {};
+
+const searchClients = searchParams ? searchParams.replace("?", "") : "";
+
+if (paramArr?.length === 1) {
+  req = {
+    catId: 99,
+    link: `/sim-ngu-quy-${param}`,
+    tail: param,
+    type: "category",
+    searchClient: `&${searchClients}`,
+  };
+} else {
+  req = {
+    catId: 99,
+    link: `/sim-ngu-quy-${param}`,
+    tail: paramArr ? paramArr[0] : "",
+    head: paramArr ? paramArr[2] : "",
+    type: "category",
+    searchClient: `&${searchClients}`,
+  };
+}
+
+let dataSims: any;
+
+let dataContentSeo: any = {};
+
+if (isNaN(Number(param)) === false) {
+  try {
+    dataSims = await SimService.getSim(req);
+  
+    const seoConfigRes = await SeoService.getContent({
+      link: `${pathname}`,
+    });
+  
+    if (seoConfigRes.success) dataContentSeo = seoConfigRes.data;
+  } catch (err) {
+    console.log(err);
+  }
+} else Astro.redirect("/404")
+
+const totalSim = dataSims?.data?.category?.totalSim || 0;
+---
+
+<Layout title={dataContentSeo?.title || "Sim ngũ quý"} desc={dataContentSeo?.description}>
+  <HeaderFilter client:load dataContentSeo={dataContentSeo} />
+  <ListSim
+    dataSim={dataSims?.data}
+    pathname={pathname}
+    searchParams={searchParams}
+    type="category"
+  />
+  <PaginationCustom
+    client:only
+    searchParams={searchParams}
+    totalSim={totalSim}
+    pathname={pathname}
+  />
+  {
+    dataContentSeo?.detail && (
+      <FindMoreContent dataContentSeo={dataContentSeo} />
+    )
+  }
+</Layout>

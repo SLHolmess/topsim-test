@@ -1,0 +1,10 @@
+---
+import SeoStaticTable from "src/components/admin/SeoStaticTable";
+import AdminLayout from "src/layouts/AdminLayout.astro";
+---
+<AdminLayout>
+  <SeoStaticTable
+    client:only
+    searchParams={Astro.url.searchParams.toString()}
+  />
+</AdminLayout>

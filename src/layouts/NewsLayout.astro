@@ -1,0 +1,42 @@
+---
+import { LocalBusinessJsonLd, OrganizationJsonLd } from "src/blogs/lib/json-ld";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="description" content="SIMGIARE.INFO" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json" set:html={LocalBusinessJsonLd()}
+    ></script>
+    <script type="application/ld+json" set:html={OrganizationJsonLd()}></script>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={"Dòng thông tin Simgiare"}
+      href="/bai-viet/feed.xml"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={"Dòng phản hồi Simgiare"}
+      href="/bai-viet/comments/feed/"
+    />
+    <title>Tin tức</title>
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>

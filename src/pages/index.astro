@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HomeView from "../components/views/HomeView";
+import SimService from "../service/sim";
+import SeoService from "../service/seo";
+import HeaderFilter from "src/components/filter-head";
+
+const pathname = Astro.url.pathname;
+
+const dataHome = await SimService.getDataHome();
+const dataConverted = dataHome?.data;
+
+let dataContentSeo: any = {};
+
+try {
+  const seoConfigRes = await SeoService.getContent({
+    link: `${pathname}`,
+  });
+
+  if (seoConfigRes.success) dataContentSeo = seoConfigRes.data;
+} catch(err) {
+  console.log(err)
+}
+
+---
+
+<Layout desc={dataContentSeo?.description} title={dataContentSeo?.title || "SIM.VN"}>
+  <HeaderFilter client:load dataContentSeo={dataContentSeo} />
+  <HomeView
+    pathname={pathname}
+    dataHome={dataConverted}
+    dataContentSeo={dataContentSeo}
+  />
+  <!-- {console.log(dataContentSeo)} -->
+</Layout>
+
+<style lang="scss"></style>

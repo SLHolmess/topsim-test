@@ -1,0 +1,27 @@
+---
+import FindMoreContent from "../components/seo-content";
+import ValuationView from "../components/views/ValuationView";
+import SeoService from "../service/seo";
+import Layout from "../layouts/Layout.astro";
+
+const pathname = Astro.url.pathname;
+
+let dataContentSeo: any = {};
+try {
+  const seoConfigRes = await SeoService.getContent({
+    link: `${pathname}`,
+  });
+
+  if (seoConfigRes.success) dataContentSeo = seoConfigRes.data;
+} catch (err) {
+  console.log(err);
+}
+---
+
+<Layout
+  desc={dataContentSeo?.description}
+  title={dataContentSeo?.title || "Định giá sim"}
+>
+  <ValuationView client:only />
+  <FindMoreContent dataContentSeo={dataContentSeo} />
+</Layout>

@@ -1,0 +1,263 @@
+---
+import Detail from "../../blogs/pages/detail";
+import {
+  getPostBySlug,
+  postPathBySlug,
+  getRelatedPosts,
+  getSearchData,
+  getRecentPosts,
+} from "../../blogs/lib/posts";
+import { categoryPathBySlug, getCategories } from "../../blogs/lib/categories";
+import { SEO } from "astro-seo";
+import {
+  ArticleJsonLd,
+  LocalBusinessJsonLd,
+  NewsArticleJsonLd,
+  OrganizationJsonLd,
+} from "../../blogs/lib/json-ld";
+import { authorPathByName } from "../../blogs/lib/users";
+import { getAllMenus } from "../../blogs/lib/menus";
+let post, title, categories, menus, recentPosts, objRelated, pathname, postSchema;
+const { slug } = Astro.params;
+try{
+  pathname = Astro.url.pathname;
+  const resPost: any = await getPostBySlug(slug);
+  post = resPost.post; 
+
+  title = post ? post.title : "";
+  let description = post ? post.description : "";
+  let date = post ? post.date : "";
+  let author = post ? post.author : "";
+  let featuredImage = post ? post.featuredImage : "";
+  postSchema = {
+    h1: "",
+    images: [],
+    description: "",
+    datePublished: "",
+    dateModified: "",
+    name: "",
+    urlAuthor: "",
+  };
+
+  postSchema.h1 = title;
+  postSchema.images = [featuredImage?.sourceUrl];
+  postSchema.description =
+    description || post?.og?.description || `Read more about ${title}`;
+  postSchema.datePublished = date;
+  postSchema.dateModified = date;
+  postSchema.name = author.name;
+  postSchema.urlAuthor = authorPathByName(author?.name);
+  const categoriesPost = post ? post.categories : "";
+  const postId = post ? post.databaseId : 1;
+  // const props = {
+  //   post,
+  //   socialImage: `${process.env.OG_IMAGE_DIRECTORY}/${slug}.png`,
+  // };
+  let a = await getRelatedPosts(categoriesPost, postId)
+
+  // const { category: relatedCategory, posts: relatedPosts } =
+  //   (await getRelatedPosts(categoriesPost, postId)) || {};
+  // console.log('relatedPosts', relatedPosts)
+  // const hasRelated =
+  //   Array.isArray(relatedPosts) && relatedPosts.length;
+  // console.log('hasRelated', hasRelated)
+  // let related = {};
+  // if (hasRelated) {
+  //   related = {
+  //     posts: relatedPosts,
+  //     title: {
+  //       name: relatedCategory.name || null,
+  //       link: categoryPathBySlug(relatedCategory.slug),
+  //     },
+  //   };
+  // }
+  let related = {
+    posts: a,
+    title: {
+      name: '',
+      link: ''
+    }
+  }
+  objRelated = related
+  const { posts: resRecentPosts } = await getRecentPosts({
+    count: 5,
+    queryIncludes: "index",
+  });
+  recentPosts = resRecentPosts;
+
+  const resCate = await getCategories({
+    count: 5,
+  });
+  categories = resCate.categories;
+  const resMenus = await getAllMenus();
+  menus = resMenus.menus
+
+if(!post) return Astro.redirect("/404");
+}catch(err) {
+  console.log(err)
+  return Astro.redirect("/404");
+}
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  {
+    post && (
+      <head>
+        <SEO
+          title={post.metaTitle}
+          description={post.metaDescription}
+          openGraph={{
+            basic: {
+              title: post.og?.title,
+              type: post.og?.type,
+              image: post.og?.image?.sourceUrl,
+            },
+            article: {
+              author: post.og?.author,
+              publishedTime: post.og?.publishedTime,
+              modifiedTime: post.og?.modifiedTime,
+            },
+            image: {
+              width: 2000,
+              height: 1000,
+              secureUrl: `/images/og/${slug}.png`,
+              url: `/images/og/${slug}.png`,
+            },
+          }}
+          twitter={{
+            description: post.twitter?.description,
+            image: post.twitter?.image.sourceUrl,
+            title: post.twitter?.title,
+          }},
+          noindex={false}
+          nofollow={false}
+          canonical={post.canonical}
+          extend={{
+            // extending the default link tags
+            link: [
+              {
+                rel: "alternate",
+                href: `/bai-viet/${slug}`,
+                hrefLang: "vi-vn",
+              },
+
+              // Favicon sizes and manifest generated via https://favicon.io/
+              {
+                rel: "icon",
+                type: "image/x-icon",
+                href: "/favicon.ico",
+              },
+              {
+                name: "viewport",
+                content:
+                  'content="width=device-width, initial-scale=1, maximum-scale=1',
+              },
+              {
+                rel: "apple-touch-icon",
+                sizes: "180x180",
+                href: "/bai-viet/apple-touch-icon.png",
+              },
+              {
+                rel: "icon",
+                type: "image/png",
+                sizes: "16x16",
+                href: "/bai-viet/favicon-16x16.png",
+              },
+              {
+                rel: "icon",
+                type: "image/png",
+                sizes: "32x32",
+                href: "/bai-viet/favicon-32x32.png",
+              },
+              {
+                rel: "manifest",
+                href: "/bai-viet/site.webmanifest",
+              },
+            ],
+          }}
+        />
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="description" content="SIM.VN" />
+        <title>{title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
+          rel="stylesheet"
+        />
+
+        <script
+          type="application/ld+json"
+          set:html={ArticleJsonLd({ post, title: post.metaTitle })}
+        />
+        <script
+          type="application/ld+json"
+          set:html={NewsArticleJsonLd(postSchema)}
+        />
+        <script type="application/ld+json" set:html={LocalBusinessJsonLd()} />
+        <script type="application/ld+json" set:html={OrganizationJsonLd()} />
+
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={"Dòng thông tin SimVN"}
+          href="/bai-viet/feed.xml"
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={"Dòng phản hồi SimVN"}
+          href={"/bai-viet/comments/feed/"}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={post.title}
+          href={postPathBySlug(post.slug) + "/feed/"}
+        />
+        <style is:inline>
+          #toc_container {
+            width: 100% !important;
+          }
+          #toc_container li,#toc_container ul{
+            margin:0;padding:0
+          }
+          #toc_container.no_bullets li,#toc_container.no_bullets ul,
+          #toc_container.no_bullets ul li,.toc_widget_list.no_bullets,.toc_widget_list.no_bullets li{background:0 0;list-style-type:none;list-style:none}
+          #toc_container.have_bullets li{padding-left:12px}
+          #toc_container ul ul{margin-left:1.5em}
+          #toc_container{background:#f9f9f9;border:1px solid #aaa;padding:10px;margin-bottom:1em;width:auto;display:table;font-size:95%}
+          #toc_container.toc_light_blue{background:#edf6ff}
+          #toc_container.toc_white{background:#fff}
+          #toc_container.toc_black{background:#000}
+          #toc_container.toc_transparent{background:none transparent}
+          #toc_container p.toc_title{text-align:center;font-weight:700;margin:0;padding:0}
+          #toc_container.toc_black p.toc_title{color:#aaa}
+          #toc_container span.toc_toggle{font-weight:400;font-size:90%}
+          #toc_container p.toc_title+ul.toc_list{margin-top:1em}.toc_wrap_left{float:left;margin-right:10px}
+          .toc_wrap_right{float:right;margin-left:10px}
+          #toc_container a{text-decoration:none;text-shadow:none}
+          #toc_container a:hover{text-decoration:underline}.toc_sitemap_posts_letter{font-size:1.5em;font-style:italic}
+        </style>
+      </head>
+    )
+  }
+
+  <body>
+    <Detail
+      client:only
+      categories={categories}
+      menus={menus}
+      recentPosts={recentPosts}
+      post={post}
+      related={objRelated}
+      pathname={pathname}
+    />
+  </body>
+</html>

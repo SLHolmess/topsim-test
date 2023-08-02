@@ -1,0 +1,39 @@
+---
+import FindMoreContent from "../components/seo-content";
+import PhongThuyFilter from "../components/views/PhongThuy";
+import ListSimPhongThuy from "../components/views/PhongThuy/ListSimPhongThuy";
+import SeoService from "../service/seo";
+import SimService from "../service/sim";
+import Layout from "../layouts/Layout.astro";
+
+const pathname = Astro.url.pathname;
+
+const searchString = Astro.url.search;
+
+const searchParams = Astro.url.searchParams;
+
+let dataSims: any;
+
+let dataContentSeo: any = {};
+try {
+  dataSims = await SimService.getPhongThuy(searchString);
+
+  const seoConfigRes = await SeoService.getContent({
+    link: `${pathname}`,
+  });
+
+  if (seoConfigRes.success) dataContentSeo = seoConfigRes.data;
+} catch (err) {
+  console.log(err);
+}
+---
+
+<Layout title={dataContentSeo?.title || "Sim phong thủy"} desc={dataContentSeo?.description} noSide>
+  <PhongThuyFilter
+    client:load
+    pathname={pathname}
+    searchString={searchString}
+  />
+  <ListSimPhongThuy dataSim={dataSims} searchParams={searchParams} />
+  <FindMoreContent dataContentSeo={dataContentSeo} noTitle />
+</Layout>

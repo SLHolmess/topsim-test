@@ -1,0 +1,103 @@
+---
+import SimDetail from "../components/sim-component/SimDetail";
+import FormOrderSim from "../components/sim-component/SimDetail/FormOrderSim";
+import SimService from "../service/sim";
+import Layout from "../layouts/Layout.astro";
+
+import SimSold from "src/components/views/SimSold";
+import { replaceSimDetailVariables } from "src/helpers/client/helpers";
+import { Pane } from "evergreen-ui";
+
+const { simNumber } = Astro.params;
+const pathname = Astro.url.pathname;
+
+let is404 = "";
+
+const pathArr = pathname?.split("/");
+
+if (pathArr.length === 2 && isNaN(Number(pathArr[1])) === true) {
+  is404 = "true";
+}
+
+let data: any;
+
+try {
+  data = await SimService.getSimDetail(`${simNumber}`);
+} catch (error) {
+  console.log(error);
+}
+
+const seoConfig = data?.data?.seoConfig;
+
+const id = data?.data?.simInfo?.detail?.id || "";
+const price = data?.data?.simInfo?.detail?.priceFormatted || "";
+const tel = data?.data?.simInfo?.detail?.telcoText || "";
+const category = data?.data?.simInfo?.detail?.categoryText || "";
+
+const description = seoConfig?.description
+  ? replaceSimDetailVariables(id, tel, category, price, seoConfig?.description)
+  : "";
+const title = seoConfig?.title
+  ? replaceSimDetailVariables(id, tel, category, price, seoConfig?.title)
+  : (simNumber as string);
+---
+
+<Layout desc={description} title={title}>
+  <div id="is404" style={{ display: "none" }}>{is404}</div>
+  {
+    data.success === true && (
+      <>
+        <SimDetail dataDetail={data?.data} seoConfig={seoConfig} />
+        <FormOrderSim client:load dataDetail={data?.data} />
+
+        <Pane elevation={1} className="bg-white p-3 rounded-md mt-4">
+          <p class="mb-2 font-semibold">
+            Hướng dẫn cách thức mua sim{" "}
+            <span
+              class="sim-title"
+              set:html={data?.data?.simInfo?.detail?.highlight}
+            />
+            :
+          </p>
+
+          <p>
+            ▪ <strong>Cách 1:</strong> SIMvn giao sim và thu tiền tại nhà miễn
+            phí (áp dụng tại Hà Nội, Tp.HCM, Đà Nẵng, Hưng Yên)
+          </p>
+          <p>
+            ▪ <strong>Cách 2:</strong> Quý khách đến cửa hàng SIMvn tại Hà Nội,
+            Tp.HCM, Đà Nẵng, Hưng Yên làm thủ tục (Xem danh sách cửa hàng ở chân
+            trang)
+          </p>
+          <p>
+            ▪ <strong>Cách 3:</strong> Đặt hàng trên website, gọi hotline hoặc
+            chat với SIM.vn sau đó sẽ có nhân viên tiếp nhận thông tin, hồ sơ
+            sang tên sau đó sẽ gửi COD hoặc giao Hỏa Tốc trong 30 phút (bạn phải
+            hỗ trợ phí giao sim) đến tận nhà, nhận sim bạn kiểm tra đúng thông
+            tin chính chủ và trả tiền cho bưu tá
+          </p>
+
+          <p class="mt-2">
+            Chúc quý khách gặp nhiều may mắn khi sở hữu thuê bao{" "}
+            <span
+              class="sim-title"
+              set:html={data?.data?.simInfo?.detail?.highlight}
+            />
+          </p>
+        </Pane>
+      </>
+    )
+  }
+  {
+    (simNumber?.length === 10 || simNumber?.length === 11) &&
+      isNaN(Number(simNumber)) === false &&
+      data.success === false && <SimSold simNumber={simNumber} client:only />
+  }
+</Layout>
+
+<script>
+  const is404 = document.getElementById("is404") as HTMLElement;
+  if (is404 && is404.textContent === "true" && typeof window !== "undefined") {
+    window.location.href = "/404";
+  }
+</script>

@@ -1,0 +1,8 @@
+---
+import NavigationView from "../navigation";
+
+const urlActive = Astro.url.pathname
+
+---
+
+<NavigationView client:load urlActive={urlActive} />

@@ -1,0 +1,70 @@
+---
+import { getCategories } from "src/blogs/lib/categories";
+import { getAllMenus } from "src/blogs/lib/menus";
+import {
+  getPaginatedPosts,
+  getRecentPosts,
+  getSearchData,
+  getSearchPostAPI,
+} from "src/blogs/lib/posts";
+import Posts from "src/blogs/pages/posts";
+import NewsLayout from "src/layouts/NewsLayout.astro";
+
+let searchData, posts, pagination: any, dataRecentPost;
+try{
+  var page: any = Astro.url.searchParams.get("page")
+    ? Astro.url.searchParams.get("page")
+    : "1";
+  var pathname = Astro.url.pathname;
+  var searchQuery: string = Astro.url.searchParams.get("search") || "";
+  var { categories } = await getCategories({
+      count: 5,
+  });
+  var { menus = [] } = await getAllMenus();
+  
+
+  if (!searchQuery) {
+    const dataPagination = await getPaginatedPosts({
+      queryIncludes: "archive",
+      currentPage: parseInt(page),
+    });
+    posts = dataPagination.posts;
+    pagination = dataPagination.pagination;
+    pagination.basePath = pathname
+    
+    const { posts: recentPosts } = await getRecentPosts({
+      count: 5,
+      queryIncludes: "index",
+    });
+    dataRecentPost = recentPosts
+    searchData = false;
+  }else{
+    const wp: any = await getSearchPostAPI(searchQuery, Number(page), 10);
+    posts = wp.data;
+    pagination = {
+      currentPage: page,
+      pagesCount: wp.totalPage,
+      basePath: pathname+"?search="+searchQuery
+    }
+    searchData = true;
+  }
+}catch(err) {
+  console.log(err)
+  return Astro.redirect("/404");
+}
+
+
+---
+
+<NewsLayout>
+  <Posts
+    client:only
+    posts={posts}
+    pagination={pagination}
+    pathname={pathname}
+    recentPosts={dataRecentPost}
+    categories={categories}
+    menus={menus}
+    searchData={searchData}
+  />
+</NewsLayout>

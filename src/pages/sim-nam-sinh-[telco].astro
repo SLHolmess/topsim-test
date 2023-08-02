@@ -1,0 +1,59 @@
+---
+import ListSim from "../components/sim-component/ListSim";
+import SeoService from "../service/seo";
+import SimService from "../service/sim";
+import Layout from "../layouts/Layout.astro";
+import HeaderFilter from "src/components/filter-head";
+import PaginationCustom from "src/components/helpers/Pagination";
+import FindMoreContent from "src/components/seo-content";
+
+const { telco } = Astro.params;
+const searchParams = Astro.url.search;
+const pathname = Astro.url.pathname;
+
+const searchClients = searchParams ? searchParams.replace("?", "") : "";
+
+let req = {
+    catId: 77,
+    link: `/sim-nam-sinh-${telco}`,
+    telco: telco,
+    type: "category",
+    searchClient: `&${searchClients}`,
+  };
+
+let dataSims: any;
+
+let dataContentSeo: any = {};
+try {
+  dataSims = await SimService.getSim(req);
+
+  const seoConfigRes = await SeoService.getContent({ link: `${pathname}` });
+  if (seoConfigRes.success) dataContentSeo = seoConfigRes.data;
+} catch (err) {
+  console.log(err);
+  return Astro.redirect('/404');
+}
+
+const totalSim = dataSims?.data?.category?.totalSim || 0;
+---
+
+<Layout title={dataContentSeo?.title || "Sim lục quý"} desc={dataContentSeo?.description}>
+  <HeaderFilter client:load dataContentSeo={dataContentSeo} />
+  <ListSim
+    dataSim={dataSims?.data}
+    pathname={pathname}
+    searchParams={searchParams}
+    type="category"
+  />
+  <PaginationCustom
+    client:only
+    searchParams={searchParams}
+    totalSim={totalSim}
+    pathname={pathname}
+  />
+  {
+    dataContentSeo?.detail && (
+      <FindMoreContent dataContentSeo={dataContentSeo} />
+    )
+  }
+</Layout>

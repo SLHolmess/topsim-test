@@ -1,0 +1,74 @@
+---
+const pathname = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Admin</title>
+
+    <script
+      src="https://cdn.tiny.cloud/1/k8evp6kqj1irh3c9a43imzd9wueeyipymhcz5a0xdq5ud133/tinymce/6/tinymce.min.js"
+      referrerpolicy="origin"></script>
+  </head>
+  <body>
+    <div
+      class="header flex gap-1 h-16 bg-gray-300 items-center p-3 fixed w-full"
+      style="top: 0px; z-index: 9;"
+    >
+      <div class="flex-grow">Web Admin</div>
+
+      <div onclick="logout()" style="cursor: pointer;">Logout</div>
+    </div>
+    <div
+      class="flex flex-row w-full"
+      style="margin-top: 64px; height: calc(100% - 64px)"
+    >
+      <div class="sidebar w-300 fixed h-full bg-blue-50 border-r">
+        <a href="/admin/seo-statics">
+          <div
+            class={`px-3 py-4 hover:bg-blue-100 cursor-pointer ${
+              pathname === "/admin/seo-statics" ? "bg-blue-100" : ""
+            }`}
+          >
+            Config SEO trang tĩnh
+          </div>
+        </a>
+        <a href="/admin/seo-products">
+          <div class={`px-3 py-4 hover:bg-blue-100 cursor-pointer ${
+            pathname === "/admin/seo-products" ? "bg-blue-100" : ""
+          }`}>
+            Config SEO sản phẩm
+          </div>
+        </a>
+        <div
+          class="px-3 py-4 hover:bg-blue-100 cursor-pointer"
+          onclick="alert('Đang cập nhật!')"
+                  >
+          Kho số ưu tiên
+        </div>
+      </div>
+
+      <div
+        class="content p-3"
+        style="margin-left: 300px; width: calc(100% - 300px)"
+      >
+        <slot />
+      </div>
+    </div>
+
+    <script is:inline>
+      if (!localStorage.getItem("token")) {
+        location.replace("/admin/login");
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        location.replace("/admin/login");
+      }
+    </script>
+  </body>
+</html>
